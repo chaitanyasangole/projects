@@ -1,0 +1,122 @@
+<html>
+<head>
+    <link href="bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <section class="button">
+        <div class="container-lg py-2">
+            <button class="btn btn-dark btn-sm text-uppercase" onclick="myFunction()" id="btnValue" type="button">Dark mode</button>
+        </div>
+    </section>         
+    <section id="focus" class="focus-section">
+        <div class="container-lg py-5">
+            <div class="container px-0">
+                <div class="row">
+                    <div class="col">
+                        <h2 class="title-section">News</h2>
+                    </div>
+                    <div class="col"> <span class="title-section d-flex justify-content-end"><a
+                                class="btn btn-archive btn-sm" href="#" role="button">Archive</a></span></div>
+
+                </div>
+            </div>
+            <div class="row" id="newsDiv">
+                <!-- News cards will be dynamically added here -->
+            </div>
+        </div>
+  
+        <div class="small text-muted py-4">Images by <a target="_blank" href="https://source.unsplash.com/">https://source.unsplash.com/</a></div>
+    </section>
+
+
+<script>
+    function myFunction() {
+  var element = document.getElementById('focus');
+  element.classList.toggle("dark-mode");
+
+  var x = document.getElementById("btnValue");
+  if (x.innerHTML === "Dark mode") {
+    x.innerHTML = "Light mode";
+    x.classList.remove('btn-dark');
+    x.classList.toggle('btn-light');
+  } else {
+    x.innerHTML = "Dark mode";
+    x.classList.remove('btn-light');
+    x.classList.toggle('btn-dark');
+  }
+}
+
+
+let obj = fetch('https://saurav.tech/NewsAPI/top-headlines/category/health/in.json');
+
+obj.then((res) => {
+    if (!res.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return res.json();
+  })
+  .then((value) => {
+    if (value.status === 'ok') {
+      data = value.articles;
+      document.getElementById('newsDiv').innerHTML = '';
+
+      let imagePath = 'dummy_600x400_ffffff_cccccc.png';
+      data.forEach(function (item, index) {
+        console.log(item, index);
+        let image = item.urlToImage ? item.urlToImage : imagePath;
+        document.getElementById('newsDiv').innerHTML +=
+          '<div class="col mb-4">' +
+          '<div class="card shadow-sm h-100">' +
+          '<div class="card-image">' +
+          '<div class="hover-text"><img src="' +
+          image +
+          '" onerror="this.src="' +
+          imagePath +
+          '";" class="card-img-top" alt="...">' +
+          '<div class="bottom-right-tag text-uppercase"></div>' +
+          '</div>' +
+          '<div class="image-overlay"></div>' +
+          '</div>' +
+          '<div class="card-body">' +
+          '<h3 class="card-title">' +
+          item.title +
+          '</h3>' +
+          '<div class="text-left my-2">' +
+          '<div class="sub-cat text-truncate">' +
+          '<span class="badge rounded-pill bg-category text-uppercase">' +
+          item.author +
+          '</span> <a href="' +
+          item.url +
+          '">' +
+          item.source.name +
+          '</a></div>' +
+          '</div>' +
+          '<p class="card-text">' +
+          item.description +
+          '</p>' +
+          '</div>' +
+          '<div class="card-footer py-3">' +
+          '<div class="card-footer__info">' +
+          '<span><i class="far fa-calendar-alt"></i></span>' +
+          '<span class="read-more">' +
+          '<a class="text-uppercase read-more-1" href="' +
+          item.url +
+          '">Read more </a>' +
+          '</span>' +
+          '</div>' +
+          '</div>' +
+          '</div>' +
+          '</div>';
+      });
+    }
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+
+</script>
+</body>
+</html>

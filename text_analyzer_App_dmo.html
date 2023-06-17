@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+ 
+<html>
+ 
+<head>
+<link rel="stylesheet" href="bootstrap.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+ 
+<body>
+ 
+<div class="container">
+ 
+<h1>Text Analyzer App</h1>
+ 
+<div class="form-group">
+ 
+<label for=" Email1msg">Text:</label>
+ 
+<textarea id="content" class="form-control" rows="5" oninput="AnalyzeText()"></textarea>
+ 
+</div>
+
+<div class="form-group" id="result">
+    Total Word count <span class="badge badge-primary" id="wordCount">0</span><br>
+    Total Number count <span class="badge badge-success" id="numberCount">0</span><br>
+    Total Character count <span class="badge badge-warning" id="characterCount">0</span><br>
+    Total Special Character count <span class="badge badge-info" id="specialCharacterCount">0</span><br>
+</div>
+</div>
+<script src="jquery.min.js"></script> 
+<script>
+    AnalyzeText();
+
+    function AnalyzeText()
+    {
+        let con=document.getElementById('content').value;
+        
+        if(con.length > 0)
+        {    
+            let characterCount=document.getElementById('characterCount').innerHTML=con.length;
+            
+            let wordCounts=con.split(" ");
+
+            if(wordCounts.length > 0)
+            document.getElementById('wordCount').innerHTML=wordCounts.length;
+            else
+            document.getElementById('wordCount').innerHTML=0;
+            
+            const  isdigit=(value)=>{
+                const val=Number(value)?true:false;
+                return val;
+            }
+
+            let numberCounts=SpecialCharacterCounts=0;
+            console.log('wordCounts='+wordCounts.length);
+            for(let j=0;j<wordCounts.length;j++)
+            {
+                sectionToCheck=wordCounts[j];
+                
+                if(isdigit(sectionToCheck))
+                {
+                    numberCounts++;
+                }
+                else if(sectionToCheck.match(/[@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g))
+                {
+                    SpecialCharacterCounts++;
+                }
+            }
+
+            document.getElementById('numberCount').innerHTML=numberCounts;
+            document.getElementById('specialCharacterCount').innerHTML=SpecialCharacterCounts;
+        }
+        else
+        {
+            document.getElementById('numberCount').innerHTML=0;
+            document.getElementById('specialCharacterCount').innerHTML=0;
+            let characterCount=document.getElementById('characterCount').innerHTML=0;
+            document.getElementById('wordCount').innerHTML=0;
+        }
+    }
+</script>
+</body>
+ 
+</html>
